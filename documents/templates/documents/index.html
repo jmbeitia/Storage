@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} {% endblock %}
+
+{% block extra_css %} 
+<link rel="stylesheet" type="text/css" href='{% static "documents/css/main.css" %}'>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-8 my-2"> 
+        <button  id="upload" type="button" class="btn btn-success">Upload new document</button> 
+    </div>
+  </div>
+  
+  
+  {% csrf_token %}
+  
+  <div class="row">
+    {% for name in names %}
+      <div class="col-md-4 mb-3">
+        <div class="card">
+          
+          <div class="card-header dropdown">
+            <strong>{{name}}</strong>
+            <a href="{% url 'reviews' %}{{name}}" class="float-right" target="_blank">Open</a>          
+            <div class="dropdown-content">
+                {% for docfile in docfiles %}
+                {% if docfile.name == name %}
+                <a href="{% url 'reviews' %}{{name}}?revision={{docfile.version}}" target="_blank">version: {{docfile.version}}</a>
+                {% endif %}
+                {% endfor %}
+              </div>      
+              </div>
+            </div>
+          </div>
+          {% if forloop.counter|divisibleby:3 %}
+            </div>
+            <div class="row">
+          {% endif %}
+    {% endfor %}
+  </div>
+   
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'documents/main.js' %}"></script>
+
+
+{% endblock extra_js %}
